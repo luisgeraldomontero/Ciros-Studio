@@ -1,0 +1,37 @@
+PROGRAM IRL;
+IMPORT DATALIST 'Tutorial.PSL';
+VAR
+	TEACH ROBTARGET : POS1;
+	TEACH ROBTARGET : POS2;
+	TEACH ROBTARGET : POS3;
+	INPUT BOOL : ItemAvailable AT 0;
+	OUTPUT BOOL : Grasp AT 0;
+	OUTPUT BOOL : Replicate AT 1;
+	OUTPUT BOOL : StartStop AT 2;
+	OUTPUT BOOL : Remove AT 3;
+	INT : i;
+BEGIN
+FOR i := 1 to 10
+	{replicate object BoxBlue}
+	Replicate := 1; Replicate :=0;
+	{start belt}
+	StartStop := 1;
+	{move robot to init position}
+	MOVE LIN POS1;
+	{wait for box}
+	WAIT FOR ItemAvailable;
+	StartStop := 0;
+	{pick object}
+	MOVE PTP POS2 @ POSITION (0.0,0.0,-50.0);
+	MOVE LIN POS2;
+	GRASP := TRUE;
+	MOVE LIN POS2 @ POSITION (0.0,0.0,-100.0);
+	{place object}
+	MOVE LIN POS3 @ POSITION (0.0,0.0,-200.0);
+	MOVE LIN POS3;
+	GRASP := FALSE;
+	MOVE PTP POS3 @ POSITION (0.0,0.0,-200.0);
+	{empty trashcan}
+	Remove := 1; Remove := 0;
+	ENDFOR;
+ENDPROGRAM;
